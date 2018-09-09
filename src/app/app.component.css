@@ -1,3 +1,9 @@
+#boardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
 #pageTitle {
   font-size: 92px;
   text-align: center;
