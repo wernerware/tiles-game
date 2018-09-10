@@ -7,7 +7,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
 })
 export class BoardComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('myCanvas') canvas : ElementRef;
+  canvas : ElementRef;
   private cx: CanvasRenderingContext2D;
 
   @Input() width : number;
@@ -25,9 +25,18 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.tileHeight = this.height / this.numRows;
   }
 
+  @ViewChild('myCanvas')
+  set myCanvas(el: ElementRef){
+    this.canvas = el;
+  }
+
+  set myCx(cxIn: CanvasRenderingContext2D){
+    this.cx = cxIn;
+  }
+
   ngAfterViewInit(): void {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    this.cx = canvasEl.getContext('2d');
+    this.myCx = canvasEl.getContext('2d');
 
     this.drawCheckerboard();
   }
@@ -35,17 +44,15 @@ export class BoardComponent implements OnInit, AfterViewInit {
   drawCheckerboard() : void {
     for(let i = 0; i < this.numCols; i++){
       for(let j = 0; j < this.numRows; j++){
-        let xCoord = this.width * i / this.numCols;
-        let yCoord = this.height * j / this.numRows;
         if( i % 2 - j % 2 == 0 ){
-          this.drawTile(xCoord, yCoord);
+          this.drawTile(i, j);
         }
       }
     }
   }
 
-  drawTile(xCoord : number, yCoord : number) : void {
-    this.cx.fillRect(xCoord, yCoord, this.tileWidth, this.tileHeight);
+  drawTile(row : number, col : number) : void {
+    this.cx.fillRect(this.width * col / this.numCols, this.height * row / this.numRows, this.tileWidth, this.tileHeight);
   }
 
 }
