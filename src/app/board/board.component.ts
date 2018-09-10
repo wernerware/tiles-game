@@ -52,7 +52,9 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   drawTile(row : number, col : number) : void {
-    this.cx.fillRect(this.width * col / this.numCols, this.height * row / this.numRows, this.tileWidth, this.tileHeight);
+    let xCoord : number = this.width * col / this.numCols;
+    let yCoord : number = this.height * row / this.numRows;
+    this.cx.fillRect(xCoord, yCoord, this.tileWidth, this.tileHeight);
   }
 
 }
