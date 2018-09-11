@@ -46,4 +46,47 @@ describe('BoardComponent', () => {
     component.drawTile(3,2);
     expect(fillRectSpy.fillRect).toHaveBeenCalledWith(20, 21, 10, 7);
   });
+
+  it('should emit a tile click event when the user clicks inside the canvas', () => {
+    component.tileClicks.subscribe(event => {
+      expect(event).toBeTruthy();
+    });
+    component.handleClick({});
+  });
+
+  it('should emit a tile click event for 3, 5 when 32, 57 is clicked on a board with 10x10 tiles', () => {
+    component.width = 100;
+    component.height = 100;
+    component.numRows = 10;
+    component.numCols = 10;
+    component.ngOnInit();
+    let event = {
+      layerX : 32,
+      layerY : 57
+    };
+
+    component.tileClicks.subscribe(event => {
+      expect(event.tileCol).toEqual(3);
+      expect(event.tileRow).toEqual(5);
+    });
+    component.handleClick(<MouseEvent>event);
+  });
+
+  it('should emit a tile click event for 9, 8 when 826, 733 is clicked on a board with 11x11 tiles', () => {
+    component.width = 1000;
+    component.height = 1000;
+    component.numRows = 11;
+    component.numCols = 11;
+    component.ngOnInit();
+    let event = {
+      layerX : 826,
+      layerY : 733
+    };
+
+    component.tileClicks.subscribe(event => {
+      expect(event.tileCol).toEqual(9);
+      expect(event.tileRow).toEqual(8);
+    });
+    component.handleClick(<MouseEvent>event);
+  });
 });

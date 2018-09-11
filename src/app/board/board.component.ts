@@ -1,4 +1,5 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {TileClickEvent} from "./tileClickEvent";
 
 @Component({
   selector: 'app-board',
@@ -19,6 +20,8 @@ export class BoardComponent implements OnInit, AfterViewInit {
   private tileHeight;
 
   constructor() { }
+
+  @Output() tileClicks : EventEmitter<TileClickEvent> = new EventEmitter();
 
   ngOnInit() {
     this.tileWidth = this.width / this.numCols;
@@ -56,5 +59,17 @@ export class BoardComponent implements OnInit, AfterViewInit {
     let yCoord : number = this.height * row / this.numRows;
     this.cx.fillRect(xCoord, yCoord, this.tileWidth, this.tileHeight);
   }
+
+  handleClick(event : MouseEvent) : void {
+
+    let col = Math.floor(event.layerX * this.numCols / this.width);
+    let row = Math.floor(event.layerY * this.numRows / this.height);
+
+    let clickEvent = new TileClickEvent();
+    clickEvent.tileCol = col;
+    clickEvent.tileRow = row;
+    clickEvent.clickEvent = event;
+
+    this.tileClicks.emit(clickEvent);
 
 }
