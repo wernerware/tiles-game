@@ -2,26 +2,27 @@ import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Outpu
 import {TileClickEvent} from "./tileClickEvent";
 
 @Component({
-  selector: 'app-board',
+  selector: 'wernerware-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit, AfterViewInit {
 
-  canvas : ElementRef;
+  private canvas: ElementRef;
   private cx: CanvasRenderingContext2D;
 
-  @Input() width : number;
-  @Input() height : number;
-  @Input() numCols : number;
-  @Input() numRows : number;
+  @Input() width: number;
+  @Input() height: number;
+  @Input() numCols: number;
+  @Input() numRows: number;
 
   private tileWidth;
   private tileHeight;
 
-  constructor() { }
+  constructor() {
+  }
 
-  @Output() tileClicks : EventEmitter<TileClickEvent> = new EventEmitter();
+  @Output() tileClicks: EventEmitter<TileClickEvent> = new EventEmitter();
 
   ngOnInit() {
     this.tileWidth = this.width / this.numCols;
@@ -29,11 +30,11 @@ export class BoardComponent implements OnInit, AfterViewInit {
   }
 
   @ViewChild('myCanvas')
-  set myCanvas(el: ElementRef){
+  set myCanvas(el: ElementRef) {
     this.canvas = el;
   }
 
-  set myCx(cxIn: CanvasRenderingContext2D){
+  set myCx(cxIn: CanvasRenderingContext2D) {
     this.cx = cxIn;
   }
 
@@ -44,23 +45,24 @@ export class BoardComponent implements OnInit, AfterViewInit {
     this.drawCheckerboard();
   }
 
-  drawCheckerboard() : void {
-    for(let i = 0; i < this.numCols; i++){
-      for(let j = 0; j < this.numRows; j++){
-        if( i % 2 - j % 2 == 0 ){
-          this.drawTile(i, j);
+  drawCheckerboard(): void {
+    for (let i = 0; i < this.numCols; i++) {
+      for (let j = 0; j < this.numRows; j++) {
+        if (i % 2 - j % 2 == 0) {
+          this.drawTile(i, j,'green');
         }
       }
     }
   }
 
-  drawTile(row : number, col : number) : void {
-    let xCoord : number = this.width * col / this.numCols;
-    let yCoord : number = this.height * row / this.numRows;
+  drawTile(row: number, col: number, fillStyle: string): void {
+    this.cx.fillStyle = fillStyle;
+    let xCoord: number = this.width * col / this.numCols;
+    let yCoord: number = this.height * row / this.numRows;
     this.cx.fillRect(xCoord, yCoord, this.tileWidth, this.tileHeight);
   }
 
-  handleClick(event : MouseEvent) : void {
+  handleClick(event: MouseEvent): void {
 
     let col = Math.floor(event.layerX * this.numCols / this.width);
     let row = Math.floor(event.layerY * this.numRows / this.height);
@@ -72,4 +74,5 @@ export class BoardComponent implements OnInit, AfterViewInit {
 
     this.tileClicks.emit(clickEvent);
 
+  }
 }

@@ -33,7 +33,7 @@ describe('BoardComponent', () => {
     component.numRows = 10;
     component.numCols = 10;
     component.ngOnInit();
-    component.drawTile(1,1);
+    component.drawTile(1,1, 'black');
     expect(fillRectSpy.fillRect).toHaveBeenCalledWith(10, 10, 10, 10);
   });
 
@@ -43,7 +43,7 @@ describe('BoardComponent', () => {
     component.numRows = 7;
     component.numCols = 10;
     component.ngOnInit();
-    component.drawTile(3,2);
+    component.drawTile(3,2, 'black');
     expect(fillRectSpy.fillRect).toHaveBeenCalledWith(20, 21, 10, 7);
   });
 
@@ -51,7 +51,7 @@ describe('BoardComponent', () => {
     component.tileClicks.subscribe(event => {
       expect(event).toBeTruthy();
     });
-    component.handleClick({});
+    component.handleClick(<MouseEvent>{});
   });
 
   it('should emit a tile click event for 3, 5 when 32, 57 is clicked on a board with 10x10 tiles', () => {

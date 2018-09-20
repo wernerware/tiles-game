@@ -1,19 +1,15 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import {TileGameComponent} from "./tile-game/tile-game.component";
 import {BoardComponent} from "./board/board.component";
+
 describe('AppComponent', () => {
-  class mockBoardComponent {
-
-  }
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
+        TileGameComponent,
         BoardComponent
-      ],
-      providers: [
-        { provide: BoardComponent, useClass: mockBoardComponent }
       ]
     }).compileComponents();
   }));
