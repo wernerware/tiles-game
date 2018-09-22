@@ -41,18 +41,6 @@ export class BoardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.myCx = canvasEl.getContext('2d');
-
-    this.drawCheckerboard();
-  }
-
-  drawCheckerboard(): void {
-    for (let i = 0; i < this.numCols; i++) {
-      for (let j = 0; j < this.numRows; j++) {
-        if (i % 2 - j % 2 == 0) {
-          this.drawTile(i, j,'green');
-        }
-      }
-    }
   }
 
   drawTile(row: number, col: number, fillStyle: string): void {

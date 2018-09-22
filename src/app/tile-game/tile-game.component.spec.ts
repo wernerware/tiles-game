@@ -14,6 +14,7 @@ describe('TileGameComponent', () => {
     @Input() height: number;
     @Input() numCols: number;
     @Input() numRows: number;
+    drawTile() : void {}
   }
 
   beforeEach(async(() => {
@@ -28,5 +29,20 @@ describe('TileGameComponent', () => {
     const fixture = TestBed.createComponent(TileGameComponent);
     const component = fixture.debugElement.componentInstance;
     expect(component).toBeTruthy();
+  }));
+
+  it('should call drawDisplayBoard() when the view is done being initialized', async( () => {
+    const fixture = TestBed.createComponent(TileGameComponent);
+    const component : TileGameComponent = fixture.debugElement.componentInstance;
+    let drawDisplayBoardSpy : jasmine.Spy = spyOn(component,'drawDisplayBoard');
+    component.ngAfterViewInit();
+    expect(drawDisplayBoardSpy).toHaveBeenCalled();
+  }));
+
+  it('should create a non-empty set of display values by the time the view is done being initialized', async(() =>{
+    const fixture = TestBed.createComponent(TileGameComponent);
+    const component : TileGameComponent = fixture.debugElement.componentInstance;
+    component.ngAfterViewInit();
+    expect(component.getDisplayValues()).toBeTruthy();
   }));
 });
