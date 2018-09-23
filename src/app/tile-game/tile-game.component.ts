@@ -43,6 +43,11 @@ export class TileGameComponent implements AfterViewInit {
         this.displayValues[i][j] = this.palette[index];
       }
     }
+
+    let startX = Math.floor(Math.random()*this.displayBoard.numCols);
+    let startY = Math.floor(Math.random()*this.displayBoard.numRows);
+    this.displayValues[startX][startY] = 'black';
+
     this.drawDisplayBoard();
   }
 
