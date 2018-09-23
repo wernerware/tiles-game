@@ -1,16 +1,16 @@
 <div class="boardContainer">
-  <wernerware-board [width]="400"
-             [height]="400"
-             [numRows]="20"
-             [numCols]="20"
+  <wernerware-board [width]="config.gameWidth"
+             [height]="config.gameHeight"
+             [numRows]="config.numRows"
+             [numCols]="config.numCols"
              (tileClicks)="handleDisplayBoardTileClick($event)"
              #display></wernerware-board>
 </div>
 <div class="boardContainer">
-  <wernerware-board [width]="400"
-             [height]="67"
-             [numRows]="1"
-             [numCols]="6"
+  <wernerware-board [width]="config.controlsWidth"
+             [height]="config.controlsHeight"
+             [numRows]="config.controlsRows"
+             [numCols]="config.controlsCols"
              (tileClicks)="handleControlBoardTileClick($event)"
              #control></wernerware-board>
 </div>

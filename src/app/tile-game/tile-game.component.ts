@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {TileClickEvent} from "../board/tileClickEvent";
 import {BoardComponent} from "../board/board.component";
+import {WernerwareTileGameConfig} from "./tile-game.config";
 
 @Component({
   selector: 'wernerware-tiles-game',
@@ -11,6 +12,8 @@ export class TileGameComponent implements AfterViewInit {
 
   @ViewChild('display') displayBoard : BoardComponent;
   @ViewChild('control') controlBoard : BoardComponent;
+
+  @Input() config : WernerwareTileGameConfig;
 
   private palette : Array<string> = ["#396AB1", "#3E9651", "#94CA6B", "#DA7C30", "#F1A75C", "#922428"];
 

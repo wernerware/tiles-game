@@ -19,4 +19,17 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
+
+  it('should create a game configuration with all values assigned truthy values', async( () => {
+    let app = new AppComponent();
+    expect(app.gameConfig).toBeTruthy();
+    expect(app.gameConfig.controlsCols).toBeTruthy();
+    expect(app.gameConfig.controlsRows).toBeTruthy();
+    expect(app.gameConfig.controlsWidth).toBeTruthy();
+    expect(app.gameConfig.controlsHeight).toBeTruthy();
+    expect(app.gameConfig.numCols).toBeTruthy();
+    expect(app.gameConfig.numRows).toBeTruthy();
+    expect(app.gameConfig.gameWidth).toBeTruthy();
+    expect(app.gameConfig.gameHeight).toBeTruthy();
+  }));
 });
