@@ -2,6 +2,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { TileGameComponent } from './tile-game.component';
 import {Component, Input} from "@angular/core";
 import {BoardComponent} from "../board/board.component";
+import {WernerwareTileGameConfigBuilder} from "./tile-game.config";
 
 describe('TileGameComponent', () => {
 
@@ -44,5 +45,27 @@ describe('TileGameComponent', () => {
     const component : TileGameComponent = fixture.debugElement.componentInstance;
     component.ngAfterViewInit();
     expect(component.getDisplayValues()).toBeTruthy();
+  }));
+
+  it('should create a display board whose dimensions have been set', async( () => {
+    const fixture = TestBed.createComponent(TileGameComponent);
+    const component : TileGameComponent = fixture.debugElement.componentInstance;
+    component.config = WernerwareTileGameConfigBuilder.default().build();
+    fixture.detectChanges();
+    expect(component.displayBoard.width).toBeTruthy();
+    expect(component.displayBoard.height).toBeTruthy();
+    expect(component.displayBoard.numCols).toBeTruthy();
+    expect(component.displayBoard.numRows).toBeTruthy();
+  }));
+
+  it('should create a control board whose dimensions have been set', async( () => {
+    const fixture = TestBed.createComponent(TileGameComponent);
+    const component : TileGameComponent = fixture.debugElement.componentInstance;
+    component.config = WernerwareTileGameConfigBuilder.default().build();
+    fixture.detectChanges();
+    expect(component.controlBoard.width).toBeTruthy();
+    expect(component.controlBoard.height).toBeTruthy();
+    expect(component.controlBoard.numCols).toBeTruthy();
+    expect(component.controlBoard.numRows).toBeTruthy();
   }));
 });

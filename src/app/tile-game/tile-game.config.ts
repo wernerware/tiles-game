@@ -59,4 +59,16 @@ export class WernerwareTileGameConfigBuilder {
   build() : WernerwareTileGameConfig {
     return this.product;
   }
+
+  static default() : WernerwareTileGameConfigBuilder {
+    return new WernerwareTileGameConfigBuilder()
+      .gameHeight(400)
+      .gameWidth(400)
+      .numCols(20)
+      .numRows(20)
+      .controlsWidth(400)
+      .controlsHeight(67)
+      .controlsCols(6)
+      .controlsRows(1);
+  }
 }
