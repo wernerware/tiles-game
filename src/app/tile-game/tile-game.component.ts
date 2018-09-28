@@ -2,6 +2,8 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core'
 import {TileClickEvent} from "../board/tileClickEvent";
 import {BoardComponent} from "../board/board.component";
 import {WernerwareTileGameConfig} from "./tile-game.config";
+import {forEach} from "@angular/router/src/utils/collection";
+import {BoardGenerator} from "./tile-game.board-generator.service";
 
 @Component({
   selector: 'wernerware-tiles-game',
@@ -15,11 +17,11 @@ export class TileGameComponent implements AfterViewInit {
 
   @Input() config : WernerwareTileGameConfig;
 
-  private palette : Array<string> = ["#396AB1", "#3E9651", "#94CA6B", "#DA7C30", "#F1A75C", "#922428"];
-
   private displayValues : Array<Array<string>>;
+  private boardGenerator : BoardGenerator;
 
-  constructor() {
+  constructor(private bg : BoardGenerator ) {
+    this.boardGenerator = bg;
   }
 
   handleDisplayBoardTileClick(event : TileClickEvent) : void {
@@ -27,35 +29,30 @@ export class TileGameComponent implements AfterViewInit {
   }
 
   handleControlBoardTileClick(event : TileClickEvent) : void {
-
+    let color : string = this.boardGenerator.getPalette()[event.tileCol];
+    // console.log(`TILE CLICK EVENT ${event.tileCol}, ${event.tileRow}, ${color}`);
+    this.displayValues = this.evaluateMove(color);
+    this.drawDisplayBoard();
   }
 
   ngAfterViewInit(): void {
     for(let i = 0; i < 8; i++ ){
-      this.controlBoard.drawTile(0, i, this.palette[i]);
+      this.controlBoard.drawTile(0, i, this.boardGenerator.getPalette()[i]);
     }
 
-    this.displayValues = new Array<Array<string>>();
-    for(let i = 0; i < this.displayBoard.width; i++){
-      this.displayValues.push(new Array<string>());
-      for(let j = 0; j < this.displayBoard.height; j++){
-        let index = Math.floor(Math.random()*this.palette.length);
-        this.displayValues[i][j] = this.palette[index];
-      }
-    }
+    this.displayValues = this.boardGenerator.generate(this.displayBoard);
 
     let startX = Math.floor(Math.random()*this.displayBoard.numCols);
     let startY = Math.floor(Math.random()*this.displayBoard.numRows);
-    this.displayValues[startX][startY] = 'black';
+    this.displayValues[startY][startX] = 'black';
 
     this.drawDisplayBoard();
   }
 
   drawDisplayBoard() : void {
-    for(let i = 0; i < this.displayBoard.width; i++){
-      this.displayValues.push(new Array<string>());
-      for(let j = 0; j < this.displayBoard.height; j++){
-        this.displayBoard.drawTile(i,j,this.displayValues[i][j]);
+    for(let j = 0; j < this.displayBoard.height; j++){
+      for(let i = 0; i < this.displayBoard.width; i++){
+        this.displayBoard.drawTile(i,j,this.displayValues[j][i]);
       }
     }
   }
@@ -64,6 +61,38 @@ export class TileGameComponent implements AfterViewInit {
     return this.displayValues;
   }
 
+  evaluateMove(color : string) : Array<Array<string>> {
+    let newBoardValues = new Array<Array<string>>();
+    for(let j = 0; j < this.displayValues.length; j++){
+      newBoardValues.push(new Array<string>());
+      for(let i = 0; i < this.displayValues[j].length; i++){
+        if( this.displayValues[j][i] === color && this.hasFinishedNeighbor(i,j)){
+          newBoardValues[j].push('black');
+        } else {
+          newBoardValues[j].push(this.displayValues[j][i]);
+        }
+      }
+    }
+    return newBoardValues;
+  }
 
+  hasFinishedNeighbor(col : number, row : number) : boolean {
+    let relativeTestPositions = [[0,1],[1,0],[0,-1],[-1,0]];
+    relativeTestPositions.forEach(function(relativePosition){
+      let testCol = relativePosition[0] + col;
+      let testRow = relativePosition[1] + row;
+      if( this.tolerantPositionQuery(testCol, testRow) === 'black' ) return true;
+    }.bind(this));
+
+    return false;
+  }
+
+  tolerantPositionQuery(col : number, row : number) : string {
+    if( col >= 0 && col < this.displayValues[0].length && row >= 0 && row < this.displayValues.length ){
+      return this.displayValues[row][col];
+    } else {
+      return null;
+    }
+  }
 
 }

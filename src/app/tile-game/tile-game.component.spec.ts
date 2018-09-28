@@ -1,8 +1,8 @@
 import { async, TestBed } from '@angular/core/testing';
 import { TileGameComponent } from './tile-game.component';
 import {Component, Input} from "@angular/core";
-import {BoardComponent} from "../board/board.component";
 import {WernerwareTileGameConfigBuilder} from "./tile-game.config";
+import {BoardGenerator} from "./tile-game.board-generator.service";
 
 describe('TileGameComponent', () => {
 
@@ -17,6 +17,8 @@ describe('TileGameComponent', () => {
     @Input() numRows: number;
     drawTile() : void {}
   }
+
+
 
   let fixture, component : TileGameComponent;
 
@@ -74,4 +76,17 @@ describe('TileGameComponent', () => {
 
     expect(displayDrawSpy).toHaveBeenCalledWith(jasmine.any(Number), jasmine.any(Number),'black');
   }));
+
+  describe('color and array logic', () => {
+    let tileGameComponent;
+
+    beforeEach(async(()=> {
+      tileGameComponent = new TileGameComponent(new BoardGenerator());
+    }));
+
+    it('should evaluate the proper color when a valid position is queried', async( () => {
+      let boardValues : Array<Array<string>> = [['white','purple'],['grey','green']];
+      // let colorChosen : string = tileGameComponent.
+    }));
+  });
 });
