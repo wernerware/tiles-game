@@ -30,8 +30,14 @@ export class TileGameComponent implements AfterViewInit {
 
   handleControlBoardTileClick(event : TileClickEvent) : void {
     let color : string = this.boardGenerator.getPalette()[event.tileCol];
-    // console.log(`TILE CLICK EVENT ${event.tileCol}, ${event.tileRow}, ${color}`);
-    this.displayValues = this.evaluateMove(color);
+    while( true ) {
+      let newValues;
+      if( newValues = this.evaluateMove(color) ){
+        this.displayValues = newValues;
+      } else {
+        break;
+      }
+    }
     this.drawDisplayBoard();
   }
 
@@ -59,17 +65,24 @@ export class TileGameComponent implements AfterViewInit {
 
   evaluateMove(color : string) : Array<Array<string>> {
     let newBoardValues = new Array<Array<string>>();
+    let changed = false;
     for(let j = 0; j < this.displayValues.length; j++){
       newBoardValues.push(new Array<string>());
       for(let i = 0; i < this.displayValues[j].length; i++){
         if( this.displayValues[j][i] === color && this.hasFinishedNeighbor(i,j)){
           newBoardValues[j].push('black');
+          changed = true;
         } else {
           newBoardValues[j].push(this.displayValues[j][i]);
         }
       }
     }
-    return newBoardValues;
+
+    if( changed ){
+      return newBoardValues;
+    } else {
+      return null;
+    }
   }
 
   hasFinishedNeighbor(col : number, row : number) : boolean {
@@ -79,8 +92,6 @@ export class TileGameComponent implements AfterViewInit {
     relativeTestPositions.every(function(relativePosition){
       let testCol = relativePosition[0] + col;
       let testRow = relativePosition[1] + row;
-      console.log(`trying [${testCol}][${testRow}] from inputs [${col}][${row}] by adding [${relativePosition[0]}][${relativePosition[1]}]`);
-      console.log(`tolerant query: ${this.tolerantPositionQuery(testCol, testRow)}`);
       if( this.tolerantPositionQuery(testCol, testRow) === 'black' ){
         retval = true;
         return false;
@@ -94,7 +105,6 @@ export class TileGameComponent implements AfterViewInit {
 
   tolerantPositionQuery(col : number, row : number) : string {
     if( col >= 0 && col < this.displayValues[0].length && row >= 0 && row < this.displayValues.length ){
-      console.log(`tolerantPositionQuery returning ${this.displayValues[col][row]}`)
       return this.displayValues[row][col];
     } else {
       return null;

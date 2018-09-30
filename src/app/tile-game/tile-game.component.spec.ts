@@ -140,6 +140,27 @@ describe('TileGameComponent', () => {
 
       let hasFinishedNeighbor : boolean = component.hasFinishedNeighbor(1,0);
       expect(hasFinishedNeighbor).toBeTruthy();
+      hasFinishedNeighbor = component.hasFinishedNeighbor(0,1);
+      expect(hasFinishedNeighbor).toBeTruthy();
+      hasFinishedNeighbor = component.hasFinishedNeighbor(0,0);
+      expect(hasFinishedNeighbor).toBeFalsy();
+      hasFinishedNeighbor = component.hasFinishedNeighbor(1,1);
+      expect(hasFinishedNeighbor).toBeFalsy();
     }));
+
+    it('should flip a tile to black if it is next to another black tile and contains the color selected', async( () => {
+      let board: Array<Array<string>> = [
+        ['black', 'white'],
+        ['grey', 'green']
+      ];
+      setup(board);
+      component.ngAfterViewInit();
+
+      let resultBoard : Array<Array<string>> = component.evaluateMove('white');
+      expect(resultBoard[0][0]).toBe('black');
+      expect(resultBoard[0][1]).toBe('black');
+      expect(resultBoard[1][0]).toBe('grey');
+      expect(resultBoard[1][1]).toBe('green');
+    }))
   });
 });
