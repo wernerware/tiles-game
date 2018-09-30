@@ -20,6 +20,10 @@ export class BoardGenerator {
       }
     }
 
+    let startX = Math.floor(Math.random()*displayBoard.numCols);
+    let startY = Math.floor(Math.random()*displayBoard.numRows);
+    displayValues[startY][startX] = 'black';
+
     return displayValues;
   }
 

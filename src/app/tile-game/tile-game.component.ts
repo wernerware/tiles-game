@@ -42,10 +42,6 @@ export class TileGameComponent implements AfterViewInit {
 
     this.displayValues = this.boardGenerator.generate(this.displayBoard);
 
-    let startX = Math.floor(Math.random()*this.displayBoard.numCols);
-    let startY = Math.floor(Math.random()*this.displayBoard.numRows);
-    this.displayValues[startY][startX] = 'black';
-
     this.drawDisplayBoard();
   }
 
@@ -77,18 +73,28 @@ export class TileGameComponent implements AfterViewInit {
   }
 
   hasFinishedNeighbor(col : number, row : number) : boolean {
+    let retval = false;
+
     let relativeTestPositions = [[0,1],[1,0],[0,-1],[-1,0]];
-    relativeTestPositions.forEach(function(relativePosition){
+    relativeTestPositions.every(function(relativePosition){
       let testCol = relativePosition[0] + col;
       let testRow = relativePosition[1] + row;
-      if( this.tolerantPositionQuery(testCol, testRow) === 'black' ) return true;
+      console.log(`trying [${testCol}][${testRow}] from inputs [${col}][${row}] by adding [${relativePosition[0]}][${relativePosition[1]}]`);
+      console.log(`tolerant query: ${this.tolerantPositionQuery(testCol, testRow)}`);
+      if( this.tolerantPositionQuery(testCol, testRow) === 'black' ){
+        retval = true;
+        return false;
+      } else {
+        return true;
+      }
     }.bind(this));
 
-    return false;
+    return retval;
   }
 
   tolerantPositionQuery(col : number, row : number) : string {
     if( col >= 0 && col < this.displayValues[0].length && row >= 0 && row < this.displayValues.length ){
+      console.log(`tolerantPositionQuery returning ${this.displayValues[col][row]}`)
       return this.displayValues[row][col];
     } else {
       return null;
